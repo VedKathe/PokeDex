@@ -1,0 +1,25 @@
+.pagination{
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.page-item{
+    background-color: #C9DDE2;
+    margin: 1rem;
+    padding: 0 1rem;
+    border-radius: .2rem;
+}
+
+.page-item.active{
+    background-color: #99d3e2;
+}
+
+.page-link{
+    -webkit-user-select: none;
+    user-select: none;
+}
+

@@ -1,0 +1,22 @@
+.container {
+    width: 100%;
+    background-color: #93B2B2; /* bg-gray-200 */
+    
+  }
+
+  .container.dark {
+    background-color: #374151; /* dark:bg-gray-700 */
+  }
+
+  .progress_bar {
+    background-color: #2E3156; /* bg-blue-600 */
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 500; /* font-medium */
+    color: #dbeafe; /* text-blue-100 */
+    text-align: left; /* text-center */
+
+    padding: 0.125rem; /* p-0.5 */
+    line-height: 1; /* leading-none */
+    
+    /* inline style width */
+  }

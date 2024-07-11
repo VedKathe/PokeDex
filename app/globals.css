@@ -6,6 +6,26 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --normal-color: #ddcbd0;
+  --fighting-color: #fcc1b0;
+  --flying-color: #b2d2e8;
+  --poison-color: #cfb7ed;
+  --ground-color: #f4d1a6;
+  --rock-color: #c5aea8;
+  --bug-color: #c1e0c8;
+  --ghost-color: #d7c2d7;
+  --steel-color: #c2d4ce;
+  --fire-color: #edc2c4;
+  --water-color: #cbd5ed;
+  --grass-color: #c0d4c8;
+  --electric-color: #e2e2a0;
+  --psychic-color: #ddc0cf;
+  --ice-color: #c7d7df;
+  --dragon-color: #cadcdf;
+  --dark-color: #c6c5e3;
+  --fairy-color: #e4c0cf;
+  --unknown-color: #c0dfdd;
+  --shadow-color: #cacaca;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,13 +37,9 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color:  #2E3156;
+  background: #DEEDED;
+
 }
 
 @layer utilities {
