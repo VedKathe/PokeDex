@@ -100,7 +100,7 @@ export default function Card({ ...props }) {
     pokemonType &&
     <div className="rounded-xl" style={{ background: `linear-gradient(${pokemonType.length>1?pokemonType:[pokemonType,pokemonType]})` }}>
       <div className="relative flex flex-col  text-gray-700  shadow-md bg-clip-border rounded-xl w-48 h-64 border-[#2E3156] border-dashed border-2 max-sm:w-40" onClick={handleModalOpen}>
-        <div className="relative  mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
+        <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
 
           {pokemonData.sprites &&
             <img className="w-full h-full" src={pokemonData.sprites.other.dream_world.front_default} alt="profile-picture" />
@@ -117,7 +117,7 @@ export default function Card({ ...props }) {
 
             {
               pokemonData &&
-              pokemonData.id
+              (pokemonData.id < 10)?(`00${pokemonData.id}`):((pokemonData.id < 100)?(`0${pokemonData.id}`):(pokemonData.id)) 
             }
 
 

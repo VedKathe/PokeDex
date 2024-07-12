@@ -11,6 +11,7 @@
     justify-content: center;
     align-items: center;
     z-index: 100;
+   
 }
 
 .model_content{
@@ -18,14 +19,15 @@
     background-color: #DEEDED;
     padding: 20px;
     
-    width: 90%;
+    width: 100%;
     height: 100%;
-    max-width: 40rem;
+    max-width: 47rem;
     opacity: 1;
     z-index: 1002;
     display: flex;
     flex-direction: column;
-    
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .normal {
@@ -188,17 +190,103 @@
   display: flex;
   flex-direction: column;
   padding: 0 1rem;
+
 }
 
 .imgsection{
-
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .namesection{
   display: flex;
   flex-direction: row ;
+  justify-content: space-between;
+}
+
+.namesection label{
+  
+  font-size: 20px;
+  padding: .5rem;
+
+  line-height: 35.16px;
+  letter-spacing: 0.06em;
+  text-align: center;  
+}
+
+
+
+.namesection label:nth-child(1){
+  
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 35.16px;
+  letter-spacing: 0.06em;
+  text-align: center;  
+}
+
+.namesection .btnsection{
+  display: flex;
+  flex-direction: row ;
+  justify-content: space-between;
+  align-items: center;
+  gap:.5rem;
+  margin: 0 0.3rem;
+  
 }
 
 .dissection{
+  margin-top: 1rem;
+  text-align: justify;
+  padding: 0 0.5rem;
+}
 
+.vl {
+  border-left: 1px solid #5D5F7E;
+  height: 100%;
+  left: 50%;
+  
+  top: 0;
+}
+
+.infocontainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+.inforow{
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
+  justify-content: space-between;
+}
+
+.infocol{
+  font-weight: 700;
+  margin: 0 .5rem;
+}
+
+.infovalue{
+  font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  text-transform: capitalize; 
+}
+
+.type{
+  border: 1px solid #2E3156;
+  border-radius: 5px;
+  padding: 0.1rem 0.2rem;
+  margin: 0.1rem 0.2rem;
+  
+}
+
+.ability{
+  text-transform: capitalize;
+  display: flex;
+  flex-wrap: wrap;
 }

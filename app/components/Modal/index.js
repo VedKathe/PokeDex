@@ -1,8 +1,13 @@
+
 import { useEffect, useState } from 'react';
 import styles from "./modal.module.css"
 import AudioCard from "../AudioCard"
 import Progress from "../Progress"
 import ReadMore from "../ReadMore"
+import { RxCrossCircled } from "react-icons/rx";
+import { PiArrowCircleLeftLight } from "react-icons/pi";
+import { PiArrowCircleRightLight } from "react-icons/pi";
+
 
 export default function Modal({ ...props }) {
 
@@ -12,6 +17,8 @@ export default function Modal({ ...props }) {
     const [pokemonDiscribation, setPokemonDiscribation] = useState([])
     const [pokemonSpecie, setPokemonSpecie] = useState()
     const [pokemonType, setPokemonType] = useState([])
+    const [pokemonWeakness, setpokemonWeakness] = useState([])
+
 
     async function fetchData() {
         try {
@@ -24,8 +31,6 @@ export default function Modal({ ...props }) {
             const pokemonJsonSpecies = await pokemonSpecies.json();
 
             setPokemonSpecie(pokemonJsonSpecies)
-
-
 
             setPokemonDiscribation(
                 pokemonJsonSpecies.flavor_text_entries.reduce(
@@ -40,11 +45,6 @@ export default function Modal({ ...props }) {
                     }
                     , [])
             )
-
-
-
-
-
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -52,7 +52,7 @@ export default function Modal({ ...props }) {
 
     useEffect(() => {
         fetchData();
-
+        fetchWeakness()
     }, []);
 
     function getHeight(decimeter) {
@@ -65,7 +65,7 @@ export default function Modal({ ...props }) {
     }
 
     function getWeight(hectogram) {
-        return hectogram * 0.1
+        return (hectogram * 0.1).toFixed(1)
     }
 
     function getEggGroups() {
@@ -94,7 +94,7 @@ export default function Modal({ ...props }) {
     function getTypes() {
 
         const types = pokemonData.types.map((element) =>
-            <div className={styles[element.type.name]} key={element.type.name}>{element.type.name}</div>
+            <div className={`${styles[element.type.name]}  ${styles['type']}`} key={element.type.name}>{element.type.name}</div>
         )
 
         return types
@@ -110,6 +110,36 @@ export default function Modal({ ...props }) {
             </li>
         )
         return stats
+    }
+
+    async function fetchWeakness()
+    {
+        const typesArray = await Promise.all( pokemonData.types.map(async (element) =>
+           {
+            const pokemonType = await fetch(element.type.url);
+            if (!pokemonType.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            
+            const pokemonTypeJson = await pokemonType.json();
+
+            const damageFrom = pokemonTypeJson.damage_relations.double_damage_from
+            
+            return damageFrom
+           }
+        ))
+       
+        const names = [...new Set(typesArray.flatMap(array => array.map(type => type.name)))];
+        setpokemonWeakness(names);
+    }
+
+    function getWeakness()
+    {
+        const weakness = pokemonWeakness.map((element) =>
+            <div className={`${styles[element]}  ${styles['type']}`} key={element}>{element}</div>
+        )
+
+        return weakness
     }
 
     return (
@@ -131,20 +161,27 @@ export default function Modal({ ...props }) {
                         pokemonData &&
                         <div className={styles.namedissection}>
                             <div className={styles.namesection}>
-                                <label>{pokemonData.name}|</label>
-                                <label>{pokemonData.id}|</label>
-                                <div>
-                                    <button onClick={() => { handleModalClose(false) }}> close </button>
+                                <label>{pokemonData.name.toUpperCase()}</label>
+                                <div className={styles.vl}></div>
+                                <label>
+                                    {
+                                        (pokemonData.id < 10) ? (`00${pokemonData.id}`) : ((pokemonData.id < 100) ? (`0${pokemonData.id}`) : (pokemonData.id))
+                                    }
+                                </label>
+                                <div className={styles.vl}></div>
 
-                                    <button onClick={() => { handleModalClose(false) }}> close </button>
+                                <div className={styles.btnsection}>
+                                    <button onClick={() => { handleModalClose(false) }}> <PiArrowCircleLeftLight size={20} /> </button>
 
-                                    <button onClick={() => { handleModalClose(false) }}> close </button>
+                                    <button onClick={() => { handleModalClose(false) }}> <RxCrossCircled size={19} /> </button>
+
+                                    <button onClick={() => { handleModalClose(false) }}> <PiArrowCircleRightLight size={20} /> </button>
                                 </div>
                             </div>
                             <div className={styles.dissection}>
                                 <label>{
-                                    pokemonDiscribation &&  
-                                    <ReadMore text={pokemonDiscribation.toString()}></ReadMore>
+                                    pokemonDiscribation &&
+                                    <ReadMore text={pokemonDiscribation.join("")}></ReadMore>
                                 }</label>
                             </div>
 
@@ -153,22 +190,57 @@ export default function Modal({ ...props }) {
                 </div>
 
                 {/* Genral info */}
-                <div>
-                    <div>
-                        <label>height:{getHeight(pokemon.height)}</label>
-                        <label>weight:{getWeight(pokemon.weight)} Kg</label>
-                        <label>Gender:{"?"}</label>
-                        <label>Egg Groups:{
-                            pokemonSpecie &&
-                            getEggGroups()}</label>
-                    </div>
-                    <div>
-                        <label>Abilities:{getAbilities()}</label>
-                        <div>Type:{
-                            getTypes()
-                        }
+                <div className={styles.infocontainer}>
+                    <div className={styles.inforow}>
+                        <div className={styles.infocol}>
+                            Height
+                            <div className={styles.infovalue}>
+                                {getHeight(pokemon.height)}
+                            </div>
                         </div>
-                        <label>Weak Against:{"?"}</label>
+                        <div className={styles.infocol}>
+                            Weight
+                            <div className={styles.infovalue}>
+                                {getWeight(pokemon.weight)} Kg
+                            </div>
+                        </div>
+                        <div className={styles.infocol}>
+                            Gender{(`(s)`)}
+                            <div className={styles.infovalue}>
+                                Male, Female
+                            </div>
+                        </div>
+                        <div className={styles.infocol}>Egg Groups
+                            <div className={styles.infovalue}>
+                                {pokemonSpecie &&
+                                    getEggGroups()}
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.inforow}>
+                        <div className={styles.infocol}>
+                            Abilities
+                            <div className={`${styles['infovalue']} ${styles['ability']}`}>
+                                {getAbilities()}
+                            </div>
+                        </div>
+                        <div className={styles.infocol}>
+                            Type
+                            <div className={styles.infovalue}>
+                                {
+                                    getTypes()
+                                }
+                            </div>
+                        </div>
+                        <div className={styles.infocol}>
+                            Weak Against
+                            <div className={`${styles['infovalue']} ${styles['ability']}`}>
+                                {
+                                    pokemonWeakness &&
+                                    getWeakness()
+                                }
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -179,11 +251,14 @@ export default function Modal({ ...props }) {
                     <ul className={styles['grid-container']}>
                         {getStats()}
                     </ul>
+                   
                 </div>
 
                 {/* Evolution Chain */}
                 <div>
-
+                        {
+                           
+                        }       
                 </div>
             </div>
         </div>

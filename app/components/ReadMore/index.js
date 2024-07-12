@@ -4,20 +4,21 @@ import React, { useState } from "react";
 
 const ReadMore = ({ children }) => {
     
-	const text = children;
+	const text = children.replace(/(\r\n|\n|\r|\f)/gm," ");;
 	const [isReadMore, setIsReadMore] = useState(true);
 	const toggleReadMore = () => {
 		setIsReadMore(!isReadMore);
 	};
 	return (
 		<p className="text">
-			{isReadMore ? text.slice(0, 400) : text}
+			{isReadMore ? text.slice(0, 398) : text}
 			<span
 				onClick={toggleReadMore}
 				className="read-or-hide"
-				style={{ color: "green", textAlign:'justify' }}
+				style={{ color: "#2E3156", textAlign:'justify' ,fontWeight: "700",
+					}}
 			>
-				{isReadMore ? "...read more" : " show less"}
+				{isReadMore ? " . . .read more" : " show less"}
 			</span>
 		</p>
 	);
