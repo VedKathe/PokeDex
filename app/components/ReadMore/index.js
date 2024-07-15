@@ -6,7 +6,7 @@ const Modal = ({ children, onClose }) => {
   return (
 	<div className="fixed inset-0 z-50 flex items-center justify-center  ">
 	<div className="absolute inset-0  "></div>
-	<div className="relative bg-white rounded-lg p-8 w-[42rem] bg-[#2E3156] ">
+	<div className="relative  rounded-lg p-8 w-[42rem] bg-[#2E3156] ">
 	  <span
 		className="absolute top-0 right-0 cursor-pointer   p-2 text-white"
 		onClick={onClose}
