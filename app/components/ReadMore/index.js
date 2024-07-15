@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 const Modal = ({ children, onClose }) => {
   return (
-	<div className="fixed inset-0 z-50 flex items-center justify-center ">
+	<div className="fixed inset-0 z-50 flex items-center justify-center  ">
 	<div className="absolute inset-0  "></div>
 	<div className="relative bg-white rounded-lg p-8 w-[42rem] bg-[#2E3156] ">
 	  <span
@@ -13,7 +13,7 @@ const Modal = ({ children, onClose }) => {
 	  >
 		&times;
 	  </span>
-	  <p className="text-white text-sm ">{children}</p>
+	  <p className="text-white text-sm  h-[20rem] overflow-auto ">{children}</p>
 	</div>
   </div>
   );

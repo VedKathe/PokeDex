@@ -14,10 +14,10 @@ const initialRanges = [
 
 const StatsName = ["HP", "Attack", "Defense", "Sp. Attack", "Sp. Def.", "Speed"]
 
-const MultiRangeSliderDropdown = ({setStatsfilter}) => {
+const MultiRangeSliderDropdown = ({...props}) => {
   const [ranges, setRanges] = useState(initialRanges);
   const [isOpen, setIsOpen] = useState(false);
-  
+  const {setStatsfilter} = props
   const handleRangeChange = (index, newRange) => {
     const updatedRanges = ranges.map((range, i) =>
       i === index ? newRange : range

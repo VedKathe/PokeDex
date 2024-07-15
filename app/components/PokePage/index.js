@@ -24,8 +24,6 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
     }
 
     useEffect(() => {
-
-
         async function pokemonGetData() {
             const result = await Promise.all(await pokemons.map(async (value) => {
                 const pokemondata = await fetch(value.url);

@@ -43,43 +43,63 @@ export default function Modal({ ...props }) {
     const [pokemonWeakness, setpokemonWeakness] = useState([])
     const [pokemonEvolution, setpokemonEvolution] = useState([])
 
-    async function fetchData() {
-        try {
-
-
-            const pokemonSpecies = await fetch(pokemonData.species.url);
-            if (!pokemonSpecies.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            const pokemonJsonSpecies = await pokemonSpecies.json();
-
-            setPokemonSpecie(pokemonJsonSpecies)
-
-            setPokemonDiscribation(
-                pokemonJsonSpecies.flavor_text_entries.reduce(
-                    (acc, current) => {
-                        if (current.language.name === "en") {
-                            if (!acc.includes(current.flavor_text)) {
-                                acc.push(current.flavor_text)
-                                return acc
-                            }
-                        }
-                        return acc
-                    }
-                    , [])
-            )
-
-            getTypesColor(pokemonData)
-            fetchEvolution(pokemonJsonSpecies);
-
-
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
+    
 
     useEffect(() => {
+        async function fetchData() {
+            try {
+    
+    
+                const pokemonSpecies = await fetch(pokemonData.species.url);
+                if (!pokemonSpecies.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const pokemonJsonSpecies = await pokemonSpecies.json();
+    
+                setPokemonSpecie(pokemonJsonSpecies)
+    
+                setPokemonDiscribation(
+                    pokemonJsonSpecies.flavor_text_entries.reduce(
+                        (acc, current) => {
+                            if (current.language.name === "en") {
+                                if (!acc.includes(current.flavor_text)) {
+                                    acc.push(current.flavor_text)
+                                    return acc
+                                }
+                            }
+                            return acc
+                        }
+                        , [])
+                )
+    
+                getTypesColor(pokemonData)
+                fetchEvolution(pokemonJsonSpecies);
+    
+    
+    
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        async function fetchWeakness() {
+            const typesArray = await Promise.all(pokemonData.types.map(async (element) => {
+                const pokemonType = await fetch(element.type.url);
+                if (!pokemonType.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+    
+                const pokemonTypeJson = await pokemonType.json();
+    
+                const damageFrom = pokemonTypeJson.damage_relations.double_damage_from
+    
+                return damageFrom
+            }
+            ))
+    
+            const names = [...new Set(typesArray.flatMap(array => array.map(type => type.name)))];
+            setpokemonWeakness(names);
+        }
+
         fetchData();
         fetchWeakness();
 
@@ -142,24 +162,7 @@ export default function Modal({ ...props }) {
         return stats
     }
 
-    async function fetchWeakness() {
-        const typesArray = await Promise.all(pokemonData.types.map(async (element) => {
-            const pokemonType = await fetch(element.type.url);
-            if (!pokemonType.ok) {
-                throw new Error('Failed to fetch data');
-            }
 
-            const pokemonTypeJson = await pokemonType.json();
-
-            const damageFrom = pokemonTypeJson.damage_relations.double_damage_from
-
-            return damageFrom
-        }
-        ))
-
-        const names = [...new Set(typesArray.flatMap(array => array.map(type => type.name)))];
-        setpokemonWeakness(names);
-    }
 
     function getWeakness() {
         const weakness = pokemonWeakness.map((element) =>
@@ -368,9 +371,8 @@ export default function Modal({ ...props }) {
                         {
                             pokemonEvolution &&
                             pokemonEvolution.map((poke,index) => {
-                                console.log(poke);
                                 
-                                return <div className={styles.img}>
+                                return <div key={index} className={styles.img}>
                                     < AudioCard audioName={poke.audio} pokemonColor={poke.color} pokemonImg={poke.img} pokemonName={poke.name} pokemonID ={poke.id} />
                                     {index < pokemonEvolution.length - 1 && <IoIosArrowRoundForward size={58} /> } 
                                 </div>
