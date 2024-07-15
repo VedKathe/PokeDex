@@ -12,7 +12,7 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
 
     useEffect(() => {
         async function pokemonGetData() {
-            const result = await Promise.all(await pokemonName.map(async (value) => {
+            const result = await Promise.all(await pokemons.map(async (value) => {
                 const pokemondata = await fetch(value.url);
                 if (!pokemondata.ok) {
                     throw new Error('Failed to fetch data');
@@ -34,14 +34,14 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
                 
             })
             )
-            setpokemonName(pokemonName.filter((value,index)=>{
+            setpokemonName(pokemons.filter((value,index)=>{
                 return value.name === result[index]
             }));
             
         }
 
         pokemonGetData()
-    }, [pokemonName, statsFilter])
+    }, [pokemons, statsFilter])
 
     
 
