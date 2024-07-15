@@ -10,22 +10,9 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
     const [statsFilter, setStatsFilter] = useState([])
     const [pokemonName, setpokemonName] = useState(pokemons)
 
-    if (loading) {
-        return <h2>Loading...</h2>
-
-    }
-
-    function onSelectionChange(list) {
-        handletypefilter(list);
-    }
-
-    function handleStatsFilter(list) {
-        setStatsFilter(list)
-    }
-
     useEffect(() => {
         async function pokemonGetData() {
-            const result = await Promise.all(await pokemons.map(async (value) => {
+            const result = await Promise.all(await pokemonName.map(async (value) => {
                 const pokemondata = await fetch(value.url);
                 if (!pokemondata.ok) {
                     throw new Error('Failed to fetch data');
@@ -47,14 +34,29 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
                 
             })
             )
-            setpokemonName(pokemons.filter((value,index)=>{
+            setpokemonName(pokemonName.filter((value,index)=>{
                 return value.name === result[index]
             }));
             
         }
 
         pokemonGetData()
-    }, [pokemons, statsFilter])
+    }, [pokemonName, statsFilter])
+
+    
+
+    function onSelectionChange(list) {
+        handletypefilter(list);
+    }
+
+    function handleStatsFilter(list) {
+        setStatsFilter(list)
+    }
+
+    if (loading) {
+        return <h2>Loading...</h2>
+
+    }
 
     return (
         <>
