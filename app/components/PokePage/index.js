@@ -65,7 +65,7 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
 
                 <div className="w-2/4 max-sm:w-full">
                     <label className="block">
-                        <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+                        <span className=" after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700 mb-1">
                             Search by
                         </span>
                         <input onChange={handleOnChange} type="text" name="search" className=" px-3 py-3 bg-[#C9DDE2] border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" placeholder="Name or Number" />
@@ -77,7 +77,7 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
                 <div className="w-2/4  flex justify-evenly items-center ">
                     <div className="flex flex-row justify-between w-11/12  max-md:hidden">
                         <div className="">
-                            <span className=" block text-sm font-medium text-slate-700">
+                            <span className=" block text-sm font-medium text-slate-700 mb-1">
                                 Type
                             </span>
                             <div className="w-full bg-while">
@@ -88,14 +88,14 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
                         </div>
 
                         <label className="block">
-                            <span className=" block text-sm font-medium text-slate-700">
+                            <span className=" block text-sm font-medium text-slate-700 mb-1">
                                 Gender
                             </span>
                             <MultiSelectDropdown options={["Male", "Female"]} name={"Gender"} />
                         </label>
 
                         <label className="block">
-                            <span className=" block text-sm font-medium text-slate-700">
+                            <span className=" block text-sm font-medium text-slate-700 mb-1">
                                 Stats
                             </span>
                             <RangeSlider name={"Stats"} setStatsfilter={handleStatsFilter} />

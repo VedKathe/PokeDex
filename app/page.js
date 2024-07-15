@@ -142,7 +142,7 @@ export default function Home({
   return (
     <main className="flex min-h-screen flex-col px-12 pt-10 max-sm:p-6 ">
       {/* Title */}
-      <div className="max-sm:flex max-sm:flex-col   " > <span className="text-3xl font-bold px-3 max-sm:px-0 max-sm:border-b-2 md:border-r-2 border-[#5D5F7E] py-1">Pokédex</span><span className="p-2  max-sm:px-0">Search for any Pokémon that exists on the planet</span></div>
+      <div className="max-sm:flex max-sm:flex-col my-2  " > <span className="text-3xl font-bold pe-5 max-sm:px-0 max-sm:border-b-2 md:border-r-2 border-[#5D5F7E] py-2">Pokédex</span><span className="px-5 font-semibold  text-[#5D5F7E] max-sm:px-0">Search for any Pokémon that exists on the planet</span></div>
       
       <PokePage pokemons={filteredData} isloading={isloading} handleOnChange={handleOnChange} handletypefilter={handletypefilter}></PokePage>
       {/* <Pagination postsPerPage={postsPerPage} totalPosts={pokemonData.length} paginate={paginate} activeIndex={activeIndex} ></Pagination> */}

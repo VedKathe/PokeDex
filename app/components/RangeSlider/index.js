@@ -47,7 +47,7 @@ const MultiRangeSliderDropdown = ({setStatsfilter}) => {
         onClick={() => setIsOpen(!isOpen)}
         className="px-4 py-2 w-48 bg-[#C9DDE2] text-black rounded"
       >
-        Open Sliders
+        Select Stats
       </button>
       {isOpen && (
         <div className={styles["rangecontainer"]}>
