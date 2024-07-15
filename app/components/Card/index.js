@@ -27,7 +27,7 @@ export default function Card({ ...props }) {
     { type: "shadow", color: "#cacaca" }
   ];
 
-  const { pokemon } = props;
+  const { pokemon ,pokemonlist } = props;
 
   const [pokemonType, setPokemonType] = useState(null)
   const [pokemonFormsData, setPokemonFormsData] = useState({})
@@ -88,7 +88,7 @@ export default function Card({ ...props }) {
 
   function handleModalOpen() {
     setModel(true)
-    console.log("clicked:");
+    
   }
 
   function handleModalClose() {
@@ -103,7 +103,7 @@ export default function Card({ ...props }) {
         <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
 
           {pokemonData.sprites &&
-            <img className="w-full h-full" src={pokemonData.sprites.other.dream_world.front_default} alt="profile-picture" />
+            <img className="w-full h-full" src={pokemonData.sprites.other["official-artwork"].front_default} alt="profile-picture" />
           }
 
         </div>
@@ -126,7 +126,7 @@ export default function Card({ ...props }) {
       </div>
       {
         modal &&
-        <Modal pokemon={pokemonData} pokemonColor={pokemonType} handleModalClose={() => { handleModalClose() }}> </Modal>
+        <Modal pokemon={pokemonData} pokemonlist={pokemonlist} pokemonColor={pokemonType} handleModalClose={() => { handleModalClose() }}> </Modal>
       }
     </div>
   )

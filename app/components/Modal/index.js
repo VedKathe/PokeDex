@@ -7,9 +7,32 @@ import ReadMore from "../ReadMore"
 import { RxCrossCircled } from "react-icons/rx";
 import { PiArrowCircleLeftLight } from "react-icons/pi";
 import { PiArrowCircleRightLight } from "react-icons/pi";
-
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 export default function Modal({ ...props }) {
+
+    const typeColors = [
+        { type: "normal", color: "#ddcbd0" },
+        { type: "fighting", color: "#fcc1b0" },
+        { type: "flying", color: "#b2d2e8" },
+        { type: "poison", color: "#cfb7ed" },
+        { type: "ground", color: "#f4d1a6" },
+        { type: "rock", color: "#c5aea8" },
+        { type: "bug", color: "#c1e0c8" },
+        { type: "ghost", color: "#d7c2d7" },
+        { type: "steel", color: "#c2d4ce" },
+        { type: "fire", color: "#edc2c4" },
+        { type: "water", color: "#cbd5ed" },
+        { type: "grass", color: "#c0d4c8" },
+        { type: "electric", color: "#e2e2a0" },
+        { type: "psychic", color: "#ddc0cf" },
+        { type: "ice", color: "#c7d7df" },
+        { type: "dragon", color: "#cadcdf" },
+        { type: "dark", color: "#c6c5e3" },
+        { type: "fairy", color: "#e4c0cf" },
+        { type: "unknown", color: "#c0dfdd" },
+        { type: "shadow", color: "#cacaca" }
+    ];
 
     const { pokemon, handleModalClose, pokemonColor } = props;
 
@@ -18,13 +41,13 @@ export default function Modal({ ...props }) {
     const [pokemonSpecie, setPokemonSpecie] = useState()
     const [pokemonType, setPokemonType] = useState([])
     const [pokemonWeakness, setpokemonWeakness] = useState([])
-
+    const [pokemonEvolution, setpokemonEvolution] = useState([])
 
     async function fetchData() {
         try {
 
 
-            const pokemonSpecies = await fetch(pokemon.species.url);
+            const pokemonSpecies = await fetch(pokemonData.species.url);
             if (!pokemonSpecies.ok) {
                 throw new Error('Failed to fetch data');
             }
@@ -45,6 +68,12 @@ export default function Modal({ ...props }) {
                     }
                     , [])
             )
+
+            getTypesColor(pokemonData)
+            fetchEvolution(pokemonJsonSpecies);
+
+
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -52,8 +81,9 @@ export default function Modal({ ...props }) {
 
     useEffect(() => {
         fetchData();
-        fetchWeakness()
-    }, []);
+        fetchWeakness();
+
+    }, [pokemonData]);
 
     function getHeight(decimeter) {
         var inches = (decimeter * 3.93701).toFixed(0);
@@ -112,34 +142,109 @@ export default function Modal({ ...props }) {
         return stats
     }
 
-    async function fetchWeakness()
-    {
-        const typesArray = await Promise.all( pokemonData.types.map(async (element) =>
-           {
+    async function fetchWeakness() {
+        const typesArray = await Promise.all(pokemonData.types.map(async (element) => {
             const pokemonType = await fetch(element.type.url);
             if (!pokemonType.ok) {
                 throw new Error('Failed to fetch data');
             }
-            
+
             const pokemonTypeJson = await pokemonType.json();
 
             const damageFrom = pokemonTypeJson.damage_relations.double_damage_from
-            
+
             return damageFrom
-           }
+        }
         ))
-       
+
         const names = [...new Set(typesArray.flatMap(array => array.map(type => type.name)))];
         setpokemonWeakness(names);
     }
 
-    function getWeakness()
-    {
+    function getWeakness() {
         const weakness = pokemonWeakness.map((element) =>
             <div className={`${styles[element]}  ${styles['type']}`} key={element}>{element}</div>
         )
 
         return weakness
+    }
+
+    async function fetchEvolution(pokemonJsonSpecies) {
+
+        const pokemonEvoleData = await fetch(pokemonJsonSpecies.evolution_chain.url);
+        if (!pokemonEvoleData.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        const pokemonEvoleDataJson = await pokemonEvoleData.json();
+
+        console.log(pokemonEvoleDataJson.chain);
+
+
+        let speciesNames = []
+        let currentEvolution = pokemonEvoleDataJson.chain;
+
+        while (currentEvolution) {
+
+            const species = await fetch(currentEvolution.species.url);
+            if (!species.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const pokemonEvoleDataJson = await species.json();
+
+            const data = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonEvoleDataJson.name);
+            if (!data.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const DataJson = await data.json();
+
+            const types = DataJson.types.map((element) => element.type.name)
+            const color = types.reduce((acc, current) => {
+                const typeColor = typeColors.find(item => item.type === current);
+                acc.push(typeColor.color)
+                return acc
+            }, [])
+
+            speciesNames.push({
+                "name": pokemonEvoleDataJson.name, "id": pokemonEvoleDataJson.id,
+                "img": DataJson.sprites.other["official-artwork"].front_default,
+                "audio": DataJson.cries.latest, "color": color
+            });
+            currentEvolution = currentEvolution.evolves_to[0];
+        }
+
+        setpokemonEvolution(speciesNames);
+        console.log(speciesNames);
+
+    }
+
+    function getTypesColor(pokemonfulldata) {
+        const types = pokemonfulldata.types.map((element) => element.type.name)
+        const color = types.reduce((acc, current) => {
+          const typeColor = typeColors.find(item => item.type === current);
+          acc.push(typeColor.color)
+          return acc
+        }, [])
+        setPokemonType(color)
+    }
+
+    async function handleRight(id) {
+        const data = await fetch(`https://pokeapi.co/api/v2/pokemon/` + (id + 1));
+        if (!data.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        const DataJson = await data.json();
+
+        setPokemonData(DataJson)
+    }
+
+    async function handleLeft(id) {
+        const data = await fetch(`https://pokeapi.co/api/v2/pokemon/` + ((id > 0) ? id - 1 : id));
+        if (!data.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        const DataJson = await data.json();
+
+        setPokemonData(DataJson)
     }
 
     return (
@@ -153,7 +258,7 @@ export default function Modal({ ...props }) {
                         pokemonData.cries &&
                         <div className={styles.imgsection}>
                             {
-                                < AudioCard audioName={pokemonData.cries.latest} pokemonColor={pokemonColor} pokemonImg={pokemonData.sprites.other.dream_world.front_default} />
+                                < AudioCard audioName={pokemonData.cries.latest} pokemonColor={pokemonType} pokemonImg={pokemonData.sprites.other["official-artwork"].front_default} />
                             }
                         </div>
                     }
@@ -168,14 +273,15 @@ export default function Modal({ ...props }) {
                                         (pokemonData.id < 10) ? (`00${pokemonData.id}`) : ((pokemonData.id < 100) ? (`0${pokemonData.id}`) : (pokemonData.id))
                                     }
                                 </label>
+
                                 <div className={styles.vl}></div>
 
                                 <div className={styles.btnsection}>
-                                    <button onClick={() => { handleModalClose(false) }}> <PiArrowCircleLeftLight size={20} /> </button>
+                                    <button onClick={() => { handleLeft(pokemonData.id) }}> <PiArrowCircleLeftLight size={20} /> </button>
 
                                     <button onClick={() => { handleModalClose(false) }}> <RxCrossCircled size={19} /> </button>
 
-                                    <button onClick={() => { handleModalClose(false) }}> <PiArrowCircleRightLight size={20} /> </button>
+                                    <button onClick={() => { handleRight(pokemonData.id) }}> <PiArrowCircleRightLight size={20} /> </button>
                                 </div>
                             </div>
                             <div className={styles.dissection}>
@@ -195,13 +301,13 @@ export default function Modal({ ...props }) {
                         <div className={styles.infocol}>
                             Height
                             <div className={styles.infovalue}>
-                                {getHeight(pokemon.height)}
+                                {getHeight(pokemonData.height)}
                             </div>
                         </div>
                         <div className={styles.infocol}>
                             Weight
                             <div className={styles.infovalue}>
-                                {getWeight(pokemon.weight)} Kg
+                                {getWeight(pokemonData.weight)} Kg
                             </div>
                         </div>
                         <div className={styles.infocol}>
@@ -251,14 +357,29 @@ export default function Modal({ ...props }) {
                     <ul className={styles['grid-container']}>
                         {getStats()}
                     </ul>
-                   
+
                 </div>
 
                 {/* Evolution Chain */}
-                <div>
+                <div className={styles.evolutionchaincontainer}>
+                    <div className='p-2'>Evolution Chain</div>
+                    <div className={styles.imgcontainer}>
+                        
                         {
-                           
-                        }       
+                            pokemonEvolution &&
+                            pokemonEvolution.map((poke,index) => {
+                                console.log(poke);
+                                
+                                return <div className={styles.img}>
+                                    < AudioCard audioName={poke.audio} pokemonColor={poke.color} pokemonImg={poke.img} pokemonName={poke.name} pokemonID ={poke.id} />
+                                    {index < pokemonEvolution.length - 1 && <IoIosArrowRoundForward size={58} /> } 
+                                </div>
+                                
+
+                            }
+                            )
+                        }
+                    </div>
                 </div>
             </div>
         </div>

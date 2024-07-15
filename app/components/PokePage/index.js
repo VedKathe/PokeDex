@@ -1,12 +1,23 @@
 import MultiSelectDropdown from "../MultiSelectDropdown";
 import Card from "../Card";
-const COUNTRIES = ["Austria", "Belgium", "Croatia", "Bulgaria", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Ukraine"];
+import { useState } from "react";
+const types = ["normal","fighting","flying","poison","ground","rock","bug","ghost","steel","fire","water","grass","electric","psychic","ice","dragon","dark","fairy","stellar","unknown","shadow"]
+import Multiselect from 'multiselect-react-dropdown';
+import RangeSlider from '../RangeSlider'
 
+export default function Index({ pokemons , loading ,handleOnChange , handletypefilter}) {
 
-export default function Index({ pokemons , loading }) {
+    
     if (loading){
         return <h2>Loading...</h2>
+
     }
+
+    function onSelectionChange(list)
+    {
+        handletypefilter(list);
+    }
+
     return (
         <>
             {/* Serach and Filters */}
@@ -17,7 +28,7 @@ export default function Index({ pokemons , loading }) {
                         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
                             Search by
                         </span>
-                        <input type="email" name="email" className=" px-3 py-3 bg-[#C9DDE2] border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" placeholder="Name or Number" />
+                        <input onChange={handleOnChange} type="text" name="search" className=" px-3 py-3 bg-[#C9DDE2] border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" placeholder="Name or Number" />
                     </label>
 
 
@@ -25,25 +36,29 @@ export default function Index({ pokemons , loading }) {
 
                 <div className="w-2/4  flex justify-evenly items-center ">
                     <div className="flex flex-row justify-between w-11/12  max-md:hidden">
-                        <label className="block">
+                        <div className="">
                             <span className=" block text-sm font-medium text-slate-700">
                                 Type
                             </span>
-                            <MultiSelectDropdown formFieldName={"countries"} options={COUNTRIES} />
-                        </label>
+                            <div className="w-full bg-while">
+                            
+                            <MultiSelectDropdown options={types} name={"Types" } onSelectionChange={handletypefilter}/>
+                            </div>
+                            
+                        </div>
 
                         <label className="block">
                             <span className=" block text-sm font-medium text-slate-700">
                                 Gender
                             </span>
-                            <MultiSelectDropdown formFieldName={"countries"} options={COUNTRIES} />
+                            <MultiSelectDropdown options={["Male","Female"]} name={"Gender" }/>
                         </label>
 
                         <label className="block">
                             <span className=" block text-sm font-medium text-slate-700">
                                 Stats
                             </span>
-                            <MultiSelectDropdown formFieldName={"countries"} options={COUNTRIES} />
+                            <RangeSlider name={"Stats"}/>
                         </label>
                     </div>
                     <div className="hidden  max-md:inline-block">
@@ -62,10 +77,8 @@ export default function Index({ pokemons , loading }) {
                     pokemons.map((pokemon, i) => {
                         return (
                             <div className=" flex justify-center items-center" key={i} >
-                                {
-                                    console.log(pokemon)
-                                }
-                                <Card pokemon={pokemon} />
+                                
+                                <Card pokemon={pokemon} pokemonlist={pokemons} />
 
                             </div>
                         );

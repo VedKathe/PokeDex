@@ -14,17 +14,24 @@ height: 247px;
 }
 
 .card-content{
-    position: relative; /* relative */
+     /* relative */
     margin-left: 0.75rem; /* mx-3 */
     margin-right: 0.75rem; /* mx-3 */
     margin-top: 0.75rem; /* mt-3 */
-    overflow: hidden; /* overflow-hidden */
+    /* overflow-hidden */
     color: #4b5563; /* text-gray-700 */
     height: 100%; /* h-full */
     border-radius: 0.75rem; /* rounded-xl */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
 }
 
 .card-img{
-    height: 100%;
-    width: 100%;
+    width: 9rem;
+    height: 10rem;
+
+
 }
