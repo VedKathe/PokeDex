@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import styles from './rangeslider.module.css'
@@ -17,7 +17,7 @@ const StatsName = ["HP", "Attack", "Defense", "Sp. Attack", "Sp. Def.", "Speed"]
 const MultiRangeSliderDropdown = ({setStatsfilter}) => {
   const [ranges, setRanges] = useState(initialRanges);
   const [isOpen, setIsOpen] = useState(false);
-  setStatsfilter(initialRanges)
+  
   const handleRangeChange = (index, newRange) => {
     const updatedRanges = ranges.map((range, i) =>
       i === index ? newRange : range
@@ -36,6 +36,10 @@ const MultiRangeSliderDropdown = ({setStatsfilter}) => {
     setRanges(initialRanges);
     setStatsfilter(initialRanges)
   };
+
+  useEffect(()=>{
+    setStatsfilter(initialRanges)
+  },[])
 
   return (
     <div className="relative inline-block rounded-md">

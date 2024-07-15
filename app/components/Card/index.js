@@ -27,7 +27,7 @@ export default function Card({ ...props }) {
     { type: "shadow", color: "#cacaca" }
   ];
 
-  const { pokemon ,pokemonlist , statsFilter} = props;
+  const { pokemon, pokemonlist, statsFilter } = props;
   const [pokemonRender, setPokemonRender] = useState(false)
 
   const [pokemonType, setPokemonType] = useState(null)
@@ -55,8 +55,8 @@ export default function Card({ ...props }) {
 
   const [modal, setModel] = useState(false)
 
-  
-  
+
+
 
   function getTypes(pokemonfulldata) {
     const types = pokemonfulldata.types.map((element) => element.type.name)
@@ -76,91 +76,66 @@ export default function Card({ ...props }) {
           throw new Error('Failed to fetch data');
         }
         const pokemonfulldata = await pokemondata.json();
-  
+
         setPokemonData(pokemonfulldata)
-        
+
         getTypes(pokemonfulldata)
-        
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
     fetchData();
 
-  }, [pokemon, statsFilter]);
+  }, [pokemon]);
 
 
-  useEffect(()=>{
-    checkStats()
-  },[statsFilter ])
-
+  
 
   function handleModalOpen() {
     setModel(true)
-    
+
   }
 
   function handleModalClose() {
     setModel(false)
   }
 
-  async function  checkStats(){
-    const pokemondata = await fetch(pokemon.url);
-        if (!pokemondata.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const pokemonfulldata = await pokemondata.json();
-    const result = 
-    pokemonfulldata.stats.map((value, index) => {
-        if (value.base_stat > statsFilter[index][0] && value.base_stat < statsFilter[index][1]) {
-            return true;
-        } else {
-            return false;
-        }
-    })
-    
-      // Check if all elements in result are false
-    const finalResult = result.some(value => value === true);
-
-    // If any stat meets the condition, finalResult will be true; otherwise, false
-    console.log(finalResult);
-    setPokemonRender(finalResult)
-    
-  }
+  
 
   return (
-    pokemonRender &&
-   ( pokemonType &&
-    <div className="rounded-xl" style={{ background: `linear-gradient(${pokemonType.length>1?pokemonType:[pokemonType,pokemonType]})` }}>
-      <div className="relative flex flex-col  text-gray-700  shadow-md bg-clip-border rounded-xl w-48 h-64 border-[#2E3156] border-dashed border-2 max-sm:w-40" onClick={handleModalOpen}>
-        <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
+    
+    pokemonType &&
+      <div className="rounded-xl" style={{ background: `linear-gradient(${pokemonType.length > 1 ? pokemonType : [pokemonType, pokemonType]})` }}>
+        <div className="relative flex flex-col  text-gray-700  shadow-md bg-clip-border rounded-xl w-48 h-64 border-[#2E3156] border-dashed border-2 max-sm:w-40" onClick={handleModalOpen}>
+          <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
 
-          {pokemonData.sprites &&
-            <img className="w-full h-full" src={pokemonData.sprites.other["official-artwork"].front_default} alt="profile-picture" />
-          }
-
-        </div>
-        <div className="p-3 text-center">
-          <h4 className="block mb- font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-
-            {pokemon?.name || "Pokemon"}
-
-          </h4>
-          <span className="text-xl font-sans font-normal tracking-normal text-blue-gray-500 ">
-
-            {
-              pokemonData &&
-              (pokemonData.id < 10)?(`00${pokemonData.id}`):((pokemonData.id < 100)?(`0${pokemonData.id}`):(pokemonData.id)) 
+            {pokemonData.sprites &&
+              <img className="w-full h-full" src={pokemonData.sprites.other["official-artwork"].front_default} alt="profile-picture" />
             }
 
+          </div>
+          <div className="p-3 text-center">
+            <h4 className="block mb- font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
 
-          </span>
+              {pokemon?.name || "Pokemon"}
+
+            </h4>
+            <span className="text-xl font-sans font-normal tracking-normal text-blue-gray-500 ">
+
+              {
+                pokemonData &&
+                  (pokemonData.id < 10) ? (`00${pokemonData.id}`) : ((pokemonData.id < 100) ? (`0${pokemonData.id}`) : (pokemonData.id))
+              }
+
+
+            </span>
+          </div>
         </div>
-      </div>
-      {
-        modal &&
-        <Modal pokemon={pokemonData} pokemonlist={pokemonlist} pokemonColor={pokemonType} handleModalClose={() => { handleModalClose() }}> </Modal>
-      }
-    </div>)
+        {
+          modal &&
+          <Modal pokemon={pokemonData} pokemonlist={pokemonlist} pokemonColor={pokemonType} handleModalClose={() => { handleModalClose() }}> </Modal>
+        }
+      </div> 
   )
 }
