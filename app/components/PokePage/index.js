@@ -7,7 +7,8 @@ import RangeSlider from '../RangeSlider'
 
 export default function Index({ pokemons , loading ,handleOnChange , handletypefilter}) {
 
-    
+    const [statsFilter , setStatsFilter] = useState([])
+
     if (loading){
         return <h2>Loading...</h2>
 
@@ -17,6 +18,13 @@ export default function Index({ pokemons , loading ,handleOnChange , handletypef
     {
         handletypefilter(list);
     }
+
+    function handleStatsFilter(list)
+    {
+        setStatsFilter(list)
+    }
+
+
 
     return (
         <>
@@ -58,7 +66,7 @@ export default function Index({ pokemons , loading ,handleOnChange , handletypef
                             <span className=" block text-sm font-medium text-slate-700">
                                 Stats
                             </span>
-                            <RangeSlider name={"Stats"}/>
+                            <RangeSlider name={"Stats"} setStatsfilter={handleStatsFilter}/>
                         </label>
                     </div>
                     <div className="hidden  max-md:inline-block">
@@ -78,7 +86,7 @@ export default function Index({ pokemons , loading ,handleOnChange , handletypef
                         return (
                             <div className=" flex justify-center items-center" key={i} >
                                 
-                                <Card pokemon={pokemon} pokemonlist={pokemons} />
+                                <Card pokemon={pokemon} pokemonlist={pokemons} statsFilter={statsFilter} />
 
                             </div>
                         );

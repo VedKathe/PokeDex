@@ -27,7 +27,8 @@ export default function Card({ ...props }) {
     { type: "shadow", color: "#cacaca" }
   ];
 
-  const { pokemon ,pokemonlist } = props;
+  const { pokemon ,pokemonlist , statsFilter} = props;
+  const [pokemonRender, setPokemonRender] = useState(false)
 
   const [pokemonType, setPokemonType] = useState(null)
   const [pokemonFormsData, setPokemonFormsData] = useState({})
@@ -55,6 +56,7 @@ export default function Card({ ...props }) {
   const [modal, setModel] = useState(false)
 
   
+  
 
   function getTypes(pokemonfulldata) {
     const types = pokemonfulldata.types.map((element) => element.type.name)
@@ -76,15 +78,22 @@ export default function Card({ ...props }) {
         const pokemonfulldata = await pokemondata.json();
   
         setPokemonData(pokemonfulldata)
-  
+        
         getTypes(pokemonfulldata)
+        
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
     fetchData();
 
-  }, [pokemon]);
+  }, [pokemon, statsFilter]);
+
+
+  useEffect(()=>{
+    checkStats()
+  },[statsFilter ])
+
 
   function handleModalOpen() {
     setModel(true)
@@ -95,9 +104,33 @@ export default function Card({ ...props }) {
     setModel(false)
   }
 
+  async function  checkStats(){
+    const pokemondata = await fetch(pokemon.url);
+        if (!pokemondata.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const pokemonfulldata = await pokemondata.json();
+    const result = 
+    pokemonfulldata.stats.map((value, index) => {
+        if (value.base_stat > statsFilter[index][0] && value.base_stat < statsFilter[index][1]) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+    
+      // Check if all elements in result are false
+    const finalResult = result.some(value => value === true);
+
+    // If any stat meets the condition, finalResult will be true; otherwise, false
+    console.log(finalResult);
+    setPokemonRender(finalResult)
+    
+  }
 
   return (
-    pokemonType &&
+    pokemonRender &&
+   ( pokemonType &&
     <div className="rounded-xl" style={{ background: `linear-gradient(${pokemonType.length>1?pokemonType:[pokemonType,pokemonType]})` }}>
       <div className="relative flex flex-col  text-gray-700  shadow-md bg-clip-border rounded-xl w-48 h-64 border-[#2E3156] border-dashed border-2 max-sm:w-40" onClick={handleModalOpen}>
         <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
@@ -128,6 +161,6 @@ export default function Card({ ...props }) {
         modal &&
         <Modal pokemon={pokemonData} pokemonlist={pokemonlist} pokemonColor={pokemonType} handleModalClose={() => { handleModalClose() }}> </Modal>
       }
-    </div>
+    </div>)
   )
 }

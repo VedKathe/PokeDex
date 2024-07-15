@@ -1,0 +1,30 @@
+.rangecontainer{
+    width: 600px;
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    margin-top: 0.5rem;
+    
+    background-color: #ffffff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d1d5db;
+    border-radius: 0.25rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+}
+
+.rangeslider{
+    width: 400px;
+    margin: 0.5rem 0rem; /* mb-4 */
+    display: flex; /* flex */
+    flex-direction: row; /* flex-row */
+    gap: 0.5rem; /* gap-2 */
+    border-width: 2px; /* border-2 */
+    border-radius: 0.5rem; /* rounded-lg */
+    justify-content: space-evenly; /* justify-evenly */
+    margin-left: 2.5rem; /* mx-10 */
+    border-color: #2E3156;
+    align-items: center; /* items-center */
+    padding: 0.5rem; /* p-2 */
+}
