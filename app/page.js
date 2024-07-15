@@ -45,7 +45,7 @@ export default function Home({
           
           setPokemonData(data.results)
           setfilteredData(data.results)
-          console.log(data.results);
+         
         setisloading(false);
        
       } catch (error) {
@@ -81,12 +81,12 @@ export default function Home({
           
           data.pokemon.forEach((value)=>{
             typeset.add(value.pokemon)
-            console.log(value.pokemon.url);
+            
           })
           const sortedArray = [...typeset].sort((a, b) => extractId(a.url) - extractId(b.url));;
           
           setfilteredData(sortedArray)
-          console.log(sortedArray);  
+           
 
           return data.pokemon
         }))
@@ -119,23 +119,23 @@ export default function Home({
   }
 
   function handleOnChange(e){
-    console.log(e.target.value);
+    
     setSerach(e.target.value);
     filterData(e.target.value)
   }
   
   function filterData(name){
     let searchTerm = name.toLowerCase();
-    console.log(pokemonData);
+    
     let filterdata = pokemonData.filter(pokemon => 
       {
-        console.log(pokemon);
+        
        return pokemon.name.toLowerCase().includes(searchTerm)
       });
-      console.log(filterdata);
+      
       
       setfilteredData(filterdata)
-      console.log(currentPosts);
+      
 
   }
 

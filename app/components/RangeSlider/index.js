@@ -27,7 +27,7 @@ const MultiRangeSliderDropdown = ({...props}) => {
 
   const applyChanges = () => {
     // Handle apply logic here
-    console.log('Applied ranges:', ranges);
+    
     setStatsfilter(ranges)
     setIsOpen(false);
   };

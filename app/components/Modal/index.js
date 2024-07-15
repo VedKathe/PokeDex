@@ -180,7 +180,6 @@ export default function Modal({ ...props }) {
         }
         const pokemonEvoleDataJson = await pokemonEvoleData.json();
 
-        console.log(pokemonEvoleDataJson.chain);
 
 
         let speciesNames = []
@@ -216,7 +215,7 @@ export default function Modal({ ...props }) {
         }
 
         setpokemonEvolution(speciesNames);
-        console.log(speciesNames);
+        
 
     }
 
