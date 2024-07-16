@@ -38,7 +38,7 @@ export default function Modal({ ...props }) {
 
     const [pokemonData, setPokemonData] = useState(pokemon)
     const [pokemonDiscribation, setPokemonDiscribation] = useState([])
-    const [pokemonSpecie, setPokemonSpecie] = useState()
+    const [pokemonSpecie, setPokemonSpecie] = useState<any>()
     const [pokemonType, setPokemonType] = useState([])
     const [pokemonWeakness, setpokemonWeakness] = useState([])
     const [pokemonEvolution, setpokemonEvolution] = useState([])
@@ -106,7 +106,7 @@ export default function Modal({ ...props }) {
     }, [pokemonData]);
 
     function getHeight(decimeter) {
-        var inches = (decimeter * 3.93701).toFixed(0);
+        let inches:any = (decimeter * 3.93701).toFixed(0);
         var feet = Math.floor(inches / 12);
 
         inches %= 12;
@@ -126,10 +126,6 @@ export default function Modal({ ...props }) {
         })
 
         return egg_groups.toString() || "none"
-    }
-
-    function getGender() {
-
     }
 
     function getAbilities() {
@@ -179,8 +175,6 @@ export default function Modal({ ...props }) {
             throw new Error('Failed to fetch data');
         }
         const pokemonEvoleDataJson = await pokemonEvoleData.json();
-
-
 
         let speciesNames = []
         let currentEvolution = pokemonEvoleDataJson.chain;
@@ -279,11 +273,11 @@ export default function Modal({ ...props }) {
                                 <div className={styles.vl}></div>
 
                                 <div className={styles.btnsection}>
-                                    <button onClick={() => { handleLeft(pokemonData.id) }}> <PiArrowCircleLeftLight size={20} /> </button>
+                                    <button type='button' title='left' onClick={() => { handleLeft(pokemonData.id) }}> <PiArrowCircleLeftLight size={20} /> </button>
 
-                                    <button onClick={() => { handleModalClose(false) }}> <RxCrossCircled size={19} /> </button>
+                                    <button type='button' title='close' onClick={() => { handleModalClose(false) }}> <RxCrossCircled size={19} /> </button>
 
-                                    <button onClick={() => { handleRight(pokemonData.id) }}> <PiArrowCircleRightLight size={20} /> </button>
+                                    <button type='button' title='right' onClick={() => { handleRight(pokemonData.id) }}> <PiArrowCircleRightLight size={20} /> </button>
                                 </div>
                             </div>
                             <div className={styles.dissection}>

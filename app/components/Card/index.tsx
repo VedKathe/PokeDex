@@ -28,30 +28,11 @@ export default function Card({ ...props }) {
   ];
 
   const { pokemon, pokemonlist, statsFilter } = props;
-  const [pokemonRender, setPokemonRender] = useState(false)
+
 
   const [pokemonType, setPokemonType] = useState(null)
-  const [pokemonFormsData, setPokemonFormsData] = useState({})
-  const [pokemonData, setPokemonData] = useState({
-    // id: "",
-    // name: "",
-    // sprites: "",
-    // audio: "",
-    // abilites: [],
-    // height: 0,
-    // weight: 0,
-    // genders: [],
-    // egg_groups: [],
-    // types: [],
-    // weak_againest: [],
-    // stats: [
-    //   {
-    //     name: "",
-    //     base_stat: 0
-    //   }
-    // ],
-    // evolution_chain: []
-  })
+
+  const [pokemonData, setPokemonData] = useState<any>({})
 
   const [modal, setModel] = useState(false)
 

@@ -1,11 +1,12 @@
+import { useEffect, useState } from "react";
 import MultiSelectDropdown from "../MultiSelectDropdown";
 import Card from "../Card";
-import { useEffect, useState } from "react";
-const types = ["normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel", "fire", "water", "grass", "electric", "psychic", "ice", "dragon", "dark", "fairy", "stellar", "unknown", "shadow"]
-import Multiselect from 'multiselect-react-dropdown';
 import RangeSlider from '../RangeSlider'
 
-export default function Index({ pokemons, loading, handleOnChange, handletypefilter }) {
+const types = ["normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel", "fire", "water", "grass", "electric", "psychic", "ice", "dragon", "dark", "fairy", "stellar", "unknown", "shadow"]
+
+
+export default function Index({ pokemons, isLoading, handleOnChange, handletypefilter }) {
 
     const [statsFilter, setStatsFilter] = useState([])
     const [pokemonName, setpokemonName] = useState(pokemons)
@@ -44,18 +45,12 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
     }, [pokemons, statsFilter])
 
     
-
-    function onSelectionChange(list) {
-        handletypefilter(list);
-    }
-
     function handleStatsFilter(list) {
         setStatsFilter(list)
     }
 
-    if (loading) {
+    if (isLoading) {
         return <h2>Loading...</h2>
-
     }
 
     return (
@@ -91,7 +86,7 @@ export default function Index({ pokemons, loading, handleOnChange, handletypefil
                             <span className=" block text-sm font-medium text-slate-700 mb-1">
                                 Gender
                             </span>
-                            <MultiSelectDropdown options={["Male", "Female"]} name={"Gender"} />
+                            <MultiSelectDropdown options={["Male", "Female"]} name={"Gender"} onSelectionChange={()=>{console.log("");}} />
                         </label>
 
                         <label className="block">
