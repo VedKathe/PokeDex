@@ -40,7 +40,7 @@ export default function Modal({ ...props }) {
     const [pokemonDiscribation, setPokemonDiscribation] = useState([])
     const [pokemonSpecie, setPokemonSpecie] = useState<any>()
     const [pokemonType, setPokemonType] = useState([])
-    const [pokemonWeakness, setpokemonWeakness] = useState([])
+    const [pokemonWeakness, setpokemonWeakness] = useState<any>([])
     const [pokemonEvolution, setpokemonEvolution] = useState([])
 
     
@@ -60,7 +60,7 @@ export default function Modal({ ...props }) {
     
                 setPokemonDiscribation(
                     pokemonJsonSpecies.flavor_text_entries.reduce(
-                        (acc, current) => {
+                        (acc:any, current:any) => {
                             if (current.language.name === "en") {
                                 if (!acc.includes(current.flavor_text)) {
                                     acc.push(current.flavor_text)
@@ -82,7 +82,7 @@ export default function Modal({ ...props }) {
             }
         }
         async function fetchWeakness() {
-            const typesArray = await Promise.all(pokemonData.types.map(async (element) => {
+            const typesArray = await Promise.all(pokemonData.types.map(async (element:{type:{url:string}}) => {
                 const pokemonType = await fetch(element.type.url);
                 if (!pokemonType.ok) {
                     throw new Error('Failed to fetch data');
@@ -96,7 +96,7 @@ export default function Modal({ ...props }) {
             }
             ))
     
-            const names = [...new Set(typesArray.flatMap(array => array.map(type => type.name)))];
+            const names:any = [...new Set(typesArray.flatMap(array => array.map((type:{name:string}) => type.name)))];
             setpokemonWeakness(names);
         }
 
@@ -105,7 +105,7 @@ export default function Modal({ ...props }) {
 
     }, [pokemonData]);
 
-    function getHeight(decimeter) {
+    function getHeight(decimeter:number) {
         let inches:any = (decimeter * 3.93701).toFixed(0);
         var feet = Math.floor(inches / 12);
 
@@ -114,14 +114,14 @@ export default function Modal({ ...props }) {
         return (feet + "'" + inches + '"')
     }
 
-    function getWeight(hectogram) {
+    function getWeight(hectogram:number) {
         return (hectogram * 0.1).toFixed(1)
     }
 
     function getEggGroups() {
-        let egg_groups = []
+        let egg_groups:any = []
 
-        pokemonSpecie.egg_groups.forEach((element) => {
+        pokemonSpecie.egg_groups.forEach((element:{name:string}) => {
             egg_groups.push(element.name)
         })
 
@@ -129,8 +129,8 @@ export default function Modal({ ...props }) {
     }
 
     function getAbilities() {
-        let abilities = []
-        pokemonData.abilities.forEach((element) => {
+        let abilities:any = []
+        pokemonData.abilities.forEach((element:{ability:{name:string}}) => {
             abilities.push(element.ability.name)
         })
 
@@ -139,7 +139,7 @@ export default function Modal({ ...props }) {
 
     function getTypes() {
 
-        const types = pokemonData.types.map((element) =>
+        const types = pokemonData.types.map((element:{type:{name:string}}) =>
             <div className={`${styles[element.type.name]}  ${styles['type']}`} key={element.type.name}>{element.type.name}</div>
         )
 
@@ -149,7 +149,7 @@ export default function Modal({ ...props }) {
 
     function getStats() {
         const StatsName = ["HP", "Attack", "Defense", "Sp. Attack", "Sp. Def.", "Speed"]
-        const stats = pokemonData.stats.map((element, index) =>
+        const stats = pokemonData.stats.map((element:{stat:{name:string}, base_stat:number}, index:number) =>
             <li className={styles['grid-item']} key={element.stat.name}>
                 <div className={styles["item-1"]}> {StatsName[index]} </div>
                 <div className={styles["item-2"]}><Progress value={element.base_stat} /></div>
@@ -161,14 +161,14 @@ export default function Modal({ ...props }) {
 
 
     function getWeakness() {
-        const weakness = pokemonWeakness.map((element) =>
+        const weakness = pokemonWeakness.map((element:string) =>
             <div className={`${styles[element]}  ${styles['type']}`} key={element}>{element}</div>
         )
 
         return weakness
     }
 
-    async function fetchEvolution(pokemonJsonSpecies) {
+    async function fetchEvolution(pokemonJsonSpecies:{evolution_chain:{url:string}}) {
 
         const pokemonEvoleData = await fetch(pokemonJsonSpecies.evolution_chain.url);
         if (!pokemonEvoleData.ok) {
@@ -176,7 +176,7 @@ export default function Modal({ ...props }) {
         }
         const pokemonEvoleDataJson = await pokemonEvoleData.json();
 
-        let speciesNames = []
+        let speciesNames: any = []
         let currentEvolution = pokemonEvoleDataJson.chain;
 
         while (currentEvolution) {
@@ -193,10 +193,13 @@ export default function Modal({ ...props }) {
             }
             const DataJson = await data.json();
 
-            const types = DataJson.types.map((element) => element.type.name)
-            const color = types.reduce((acc, current) => {
-                const typeColor = typeColors.find(item => item.type === current);
-                acc.push(typeColor.color)
+            const types = DataJson.types.map((element:{type:{name:string}}) => element.type.name)
+            const color = types.reduce((acc:any, current:any) => {
+                const typeColor:{
+                    type: string;
+                    color: string;
+                } | undefined = typeColors.find(item => item.type === current);
+                acc.push(typeColor?.color)
                 return acc
             }, [])
 
@@ -213,17 +216,17 @@ export default function Modal({ ...props }) {
 
     }
 
-    function getTypesColor(pokemonfulldata) {
-        const types = pokemonfulldata.types.map((element) => element.type.name)
-        const color = types.reduce((acc, current) => {
+    function getTypesColor(pokemonfulldata:{types:any}) {
+        const types = pokemonfulldata.types.map((element:{type:{name:string}}) => element.type.name)
+        const color = types.reduce((acc:any, current:any) => {
           const typeColor = typeColors.find(item => item.type === current);
-          acc.push(typeColor.color)
+          acc.push(typeColor?.color)
           return acc
         }, [])
         setPokemonType(color)
     }
 
-    async function handleRight(id) {
+    async function handleRight(id:number) {
         const data = await fetch(`https://pokeapi.co/api/v2/pokemon/` + (id + 1));
         if (!data.ok) {
             throw new Error('Failed to fetch data');
@@ -233,7 +236,7 @@ export default function Modal({ ...props }) {
         setPokemonData(DataJson)
     }
 
-    async function handleLeft(id) {
+    async function handleLeft(id:number) {
         const data = await fetch(`https://pokeapi.co/api/v2/pokemon/` + ((id > 0) ? id - 1 : id));
         if (!data.ok) {
             throw new Error('Failed to fetch data');
@@ -363,7 +366,7 @@ export default function Modal({ ...props }) {
                         
                         {
                             pokemonEvolution &&
-                            pokemonEvolution.map((poke,index) => {
+                            pokemonEvolution.map((poke:{audio:string,color:any[],img:string,name:string,id:number},index) => {
                                 
                                 return <div key={index} className={styles.img}>
                                     < AudioCard audioName={poke.audio} pokemonColor={poke.color} pokemonImg={poke.img} pokemonName={poke.name} pokemonID ={poke.id} />

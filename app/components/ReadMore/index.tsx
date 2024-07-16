@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const Modal = ({ children, onClose }) => {
+const Modal = ({ children, onClose }:{children:string, onClose:any}) => {
   return (
 	<div className="fixed inset-0 z-50 flex items-center justify-center  ">
 	<div className="absolute inset-0  "></div>
@@ -19,7 +19,7 @@ const Modal = ({ children, onClose }) => {
   );
 };
 
-const ReadMore = ({ children }) => {
+const ReadMore = ({ children }:{children:string}) => {
   const text = children.replace(/(\r\n|\n|\r|\f)/gm, " ");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -44,7 +44,7 @@ const ReadMore = ({ children }) => {
   );
 };
 
-const Content = ({ text }) => {
+const Content = ({ text }:{text:string}) => {
   return (
     <div className="container">
       <ReadMore>{text}</ReadMore>

@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styles from "./checkbox.module.css";
 
-const MultiSelectDropdown = ({ options, name,  onSelectionChange }) => {
-  const [allSelectedItems, setAllSelectedItems] = useState([]);
+
+
+const MultiSelectDropdown = ({ options, name,  onSelectionChange }:{options:any,name:string,onSelectionChange:any}) => {
+  const [allSelectedItems, setAllSelectedItems] = useState<any>([]);
   const [isOpen, setIsOpen] = useState(false);
   
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleCheckboxChange = (value) => {
+  const handleCheckboxChange = (value:any) => {
     const isSelected = allSelectedItems.includes(value);
     const newSelectedItems = isSelected
-      ? allSelectedItems.filter(item => item !== value)
+      ? allSelectedItems.filter((item:any) => item !== value)
       : [...allSelectedItems, value];
 
     setAllSelectedItems(newSelectedItems);
@@ -43,7 +45,7 @@ const MultiSelectDropdown = ({ options, name,  onSelectionChange }) => {
       </button>
       {isOpen && (
         <ul className="absolute bg-white border border-gray-300 rounded-md mt-2 w-48 max-h-60 overflow-y-auto shadow-lg z-10">
-          {options.map((option) => (
+          {options.map((option:any) => (
             <li key={option} className="p-2 hover:bg-gray-100 w-full">
               <label className={styles['menu-text']}>
                 <input

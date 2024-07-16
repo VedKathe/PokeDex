@@ -18,7 +18,7 @@ const MultiRangeSliderDropdown = ({...props}) => {
   const [ranges, setRanges] = useState(initialRanges);
   const [isOpen, setIsOpen] = useState(false);
   const {setStatsfilter} = props
-  const handleRangeChange = (index, newRange) => {
+  const handleRangeChange = (index:number, newRange:number[]) => {
     const updatedRanges = ranges.map((range, i) =>
       i === index ? newRange : range
     );
@@ -67,7 +67,7 @@ const MultiRangeSliderDropdown = ({...props}) => {
                 min={0}
                 max={210}
                 value={ranges[index]} // Use value prop instead of defaultValue
-                onChange={(newRange) => handleRangeChange(index, newRange)}
+                onChange={(newRange:any) => handleRangeChange(index, newRange)}
                 trackStyle={[{ backgroundColor: '#2E3156' }]} // Change track color
                 handleStyle={[
                   { backgroundColor: '#2E3156' }, // Change handle color

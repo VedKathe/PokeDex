@@ -46,13 +46,13 @@ export default function Home() {
   }, []);
 
 
-  function handletypefilter(list) {
+  function handletypefilter(list:any) {
     setPokemonType(list)
   }
 
   useEffect(() => {
 
-    function extractId(url) {
+    function extractId(url:any) {
       return parseInt(url.match(/\/(\d+)\//)[1], 10);
   }
 
@@ -68,11 +68,11 @@ export default function Home() {
           const data = await response.json();
 
           
-          data.pokemon.forEach((value)=>{
+          data.pokemon.forEach((value:any)=>{
             typeset.add(value.pokemon)
             
           })
-          const sortedArray = [...typeset].sort((a, b) => extractId(a.url) - extractId(b.url));;
+          const sortedArray:any = [...typeset].sort((a, b) => extractId(a.url) - extractId(b.url));;
           
           setfilteredData(sortedArray)
            
@@ -93,16 +93,16 @@ export default function Home() {
 
 
 
-  function handleOnChange(e){
+  function handleOnChange(e:any){
     
     setSerach(e.target.value);
     filterData(e.target.value)
   }
   
-  function filterData(name){
+  function filterData(name:any){
     let searchTerm = name.toLowerCase();
     
-    let filterdata = pokemonData.filter(pokemon => 
+    let filterdata = pokemonData.filter((pokemon:any) => 
       {
         
        return pokemon.name.toLowerCase().includes(searchTerm)

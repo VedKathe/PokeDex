@@ -30,7 +30,7 @@ export default function Card({ ...props }) {
   const { pokemon, pokemonlist, statsFilter } = props;
 
 
-  const [pokemonType, setPokemonType] = useState(null)
+  const [pokemonType, setPokemonType] = useState<any>(null)
 
   const [pokemonData, setPokemonData] = useState<any>({})
 
@@ -39,10 +39,10 @@ export default function Card({ ...props }) {
 
 
 
-  function getTypes(pokemonfulldata) {
-    const types = pokemonfulldata.types.map((element) => element.type.name)
-    const color = types.reduce((acc, current) => {
-      const typeColor = typeColors.find(item => item.type === current);
+  function getTypes(pokemonfulldata:any) {
+    const types = pokemonfulldata.types.map((element:any) => element.type.name)
+    const color = types.reduce((acc:any, current:any) => {
+      const typeColor:any = typeColors.find(item => item.type === current);
       acc.push(typeColor.color)
       return acc
     }, [])

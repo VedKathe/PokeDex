@@ -6,14 +6,14 @@ import RangeSlider from '../RangeSlider'
 const types = ["normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel", "fire", "water", "grass", "electric", "psychic", "ice", "dragon", "dark", "fairy", "stellar", "unknown", "shadow"]
 
 
-export default function Index({ pokemons, isLoading, handleOnChange, handletypefilter }) {
+export default function Index({ pokemons, isLoading, handleOnChange, handletypefilter }:{pokemons:any,isLoading:any,handleOnChange:any,handletypefilter:any}) {
 
     const [statsFilter, setStatsFilter] = useState([])
     const [pokemonName, setpokemonName] = useState(pokemons)
 
     useEffect(() => {
         async function pokemonGetData() {
-            const result = await Promise.all(await pokemons.map(async (value) => {
+            const result = await Promise.all(await pokemons.map(async (value:any) => {
                 const pokemondata = await fetch(value.url);
                 if (!pokemondata.ok) {
                     throw new Error('Failed to fetch data');
@@ -21,21 +21,21 @@ export default function Index({ pokemons, isLoading, handleOnChange, handletypef
                 const pokemonfulldata = await pokemondata.json();
 
                 const result =
-                    pokemonfulldata.stats.map((value, index) => {
+                    pokemonfulldata.stats.map((value:{base_stat:number}, index:number) => {
                         if (value.base_stat > statsFilter[index][0] && value.base_stat < statsFilter[index][1]) {
                             return true;
                         }
                     })
 
                 // Check if all elements in result are false
-                const finalResult = result.some(value => value === true);
+                const finalResult = result.some((value:boolean) => value === true);
                     if(finalResult){
                         return pokemonfulldata.name
                     }
                 
             })
             )
-            setpokemonName(pokemons.filter((value,index)=>{
+            setpokemonName(pokemons.filter((value:{name:string},index:number)=>{
                 return value.name === result[index]
             }));
             
@@ -45,7 +45,7 @@ export default function Index({ pokemons, isLoading, handleOnChange, handletypef
     }, [pokemons, statsFilter])
 
     
-    function handleStatsFilter(list) {
+    function handleStatsFilter(list:any) {
         setStatsFilter(list)
     }
 
@@ -109,7 +109,7 @@ export default function Index({ pokemons, isLoading, handleOnChange, handletypef
             <div className=" pt-3 grid grid-cols-6 gap-10  max-sm:grid-cols-2 max-sm:gap-2 mt-3">
 
                 {
-                    pokemonName.map((pokemon, i) => {
+                    pokemonName.map((pokemon:any, i:number) => {
                         return (
                             <div className=" flex justify-center items-center" key={i} >
 
