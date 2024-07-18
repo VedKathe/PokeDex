@@ -39,10 +39,10 @@ export default function Card({ ...props }) {
 
 
 
-  function getTypes(pokemonfulldata:any) {
-    const types = pokemonfulldata.types.map((element:any) => element.type.name)
-    const color = types.reduce((acc:any, current:any) => {
-      const typeColor:any = typeColors.find(item => item.type === current);
+  function getTypes(pokemonfulldata: any) {
+    const types = pokemonfulldata.types.map((element: any) => element.type.name)
+    const color = types.reduce((acc: any, current: any) => {
+      const typeColor: any = typeColors.find(item => item.type === current);
       acc.push(typeColor.color)
       return acc
     }, [])
@@ -71,7 +71,7 @@ export default function Card({ ...props }) {
   }, [pokemon]);
 
 
-  
+
 
   function handleModalOpen() {
     setModel(true)
@@ -82,41 +82,41 @@ export default function Card({ ...props }) {
     setModel(false)
   }
 
-  
+
 
   return (
-    
-    pokemonType &&
-      <div className="rounded-xl" style={{ background: `linear-gradient(${pokemonType.length > 1 ? pokemonType : [pokemonType, pokemonType]})` }}>
-        <div className="relative flex flex-col  text-gray-700  shadow-md bg-clip-border rounded-xl w-48 h-64 border-[#2E3156] border-dashed border-2 max-sm:w-40" onClick={handleModalOpen}>
-          <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
 
-            {pokemonData.sprites &&
-              <img className="w-full h-full" src={pokemonData.sprites.other["official-artwork"].front_default} alt="profile-picture" />
+    pokemonType &&
+    <div className="rounded-xl" style={{ background: `linear-gradient(${pokemonType.length > 1 ? pokemonType : [pokemonType, pokemonType]})` }}>
+      <div className="relative flex flex-col  text-gray-700  shadow-md bg-clip-border rounded-xl w-48 h-64 border-[#2E3156] border-dashed border-2 max-sm:w-40" onClick={handleModalOpen}>
+        <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
+
+          {pokemonData.sprites &&
+            <img className="w-full h-full" src={pokemonData.sprites.other["official-artwork"].front_default} alt="profile-picture" />
+          }
+
+        </div>
+        <div className="p-3 text-center">
+          <h4 className="block mb- font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+
+            {pokemon?.name || "Pokemon"}
+
+          </h4>
+          <span className="text-xl font-sans font-normal tracking-normal text-blue-gray-500 ">
+
+            {
+              pokemonData &&
+                (pokemonData.id < 10) ? (`00${pokemonData.id}`) : ((pokemonData.id < 100) ? (`0${pokemonData.id}`) : (pokemonData.id))
             }
 
-          </div>
-          <div className="p-3 text-center">
-            <h4 className="block mb- font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
 
-              {pokemon?.name || "Pokemon"}
-
-            </h4>
-            <span className="text-xl font-sans font-normal tracking-normal text-blue-gray-500 ">
-
-              {
-                pokemonData &&
-                  (pokemonData.id < 10) ? (`00${pokemonData.id}`) : ((pokemonData.id < 100) ? (`0${pokemonData.id}`) : (pokemonData.id))
-              }
-
-
-            </span>
-          </div>
+          </span>
         </div>
-        {
-          modal &&
-          <Modal pokemon={pokemonData} pokemonlist={pokemonlist} pokemonColor={pokemonType} handleModalClose={() => { handleModalClose() }}> </Modal>
-        }
-      </div> 
+      </div>
+      {
+        modal &&
+        <Modal pokemon={pokemonData} pokemonlist={pokemonlist} pokemonColor={pokemonType} handleModalClose={() => { handleModalClose() }}> </Modal>
+      }
+    </div>
   )
 }

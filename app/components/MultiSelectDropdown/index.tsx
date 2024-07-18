@@ -3,25 +3,25 @@ import styles from "./checkbox.module.css";
 
 
 
-const MultiSelectDropdown = ({ options, name,  onSelectionChange }:{options:any,name:string,onSelectionChange:any}) => {
+const MultiSelectDropdown = ({ options, name, onSelectionChange }: { options: any, name: string, onSelectionChange: any }) => {
   const [allSelectedItems, setAllSelectedItems] = useState<any>([]);
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleCheckboxChange = (value:any) => {
+  const handleCheckboxChange = (value: any) => {
     const isSelected = allSelectedItems.includes(value);
     const newSelectedItems = isSelected
-      ? allSelectedItems.filter((item:any) => item !== value)
+      ? allSelectedItems.filter((item: any) => item !== value)
       : [...allSelectedItems, value];
 
     setAllSelectedItems(newSelectedItems);
     onSelectionChange(newSelectedItems);
   };
 
-  useEffect(() => {}, [options]);
+  useEffect(() => { }, [options]);
 
   const selectedOptionsText = allSelectedItems.length > 1
     ? (
@@ -41,11 +41,11 @@ const MultiSelectDropdown = ({ options, name,  onSelectionChange }:{options:any,
         type="button"
         onClick={handleToggle}
       >
-       {selectedOptionsText}
+        {selectedOptionsText}
       </button>
       {isOpen && (
         <ul className="absolute bg-white border border-gray-300 rounded-md mt-2 w-48 max-h-60 overflow-y-auto shadow-lg z-10">
-          {options.map((option:any) => (
+          {options.map((option: any) => (
             <li key={option} className="p-2 hover:bg-gray-100 w-full">
               <label className={styles['menu-text']}>
                 <input

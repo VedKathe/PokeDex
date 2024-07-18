@@ -109,8 +109,8 @@ export default function Index({ pokemons, isLoading, handleOnChange, handletypef
             {isLoading ? <div className=" pt-3 grid grid-cols-6 gap-10  max-sm:grid-cols-2 max-sm:gap-4 mt-3">
                 {[...Array(18)].map((value: any, i: number) => {
                     return (
-                        
-                        <div className=" flex justify-center items-center"  key={i}>
+
+                        <div className=" flex justify-center items-center" key={i}>
 
                             <div className="rounded-xl bg-gradient-to-b from-gray-200 to-gray-300">
                                 <div className="relative flex flex-col  text-gray-700    rounded-xl w-48 h-64   max-sm:w-40">

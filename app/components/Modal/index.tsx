@@ -369,7 +369,7 @@ export default function Modal({ ...props }) {
 
                         {
                             pokemonEvolution ?
-                                pokemonEvolution.map((poke: Audiocard , index) => {
+                                pokemonEvolution.map((poke: Audiocard, index) => {
 
                                     return <div key={index} className={styles.img}>
                                         < AudioCard audioName={poke.audio} pokemonColor={poke.color} pokemonImg={poke.img} pokemonName={poke.name} pokemonID={poke.id} />
@@ -392,7 +392,7 @@ export default function Modal({ ...props }) {
                                             </div>
 
                                         </div>
-                                        
+
                                     </div>
                                 })
                         }

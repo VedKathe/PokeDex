@@ -2,10 +2,10 @@ import React from 'react';
 import styles from "./pagination.module.css"
 
 interface props {
-  postsPerPage:any; totalPosts:any; paginate:any;activeIndex:any
+  postsPerPage: any; totalPosts: any; paginate: any; activeIndex: any
 }
 
-const Pagination = ({ postsPerPage, totalPosts, paginate ,activeIndex }:props) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, activeIndex }: props) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -15,11 +15,11 @@ const Pagination = ({ postsPerPage, totalPosts, paginate ,activeIndex }:props) =
   return (
     <nav>
       <ul className={styles['pagination']}>
-        {pageNumbers.map((number,index) => (
-          <li key={number} onClick={() => paginate(number,index)} className={`${styles['page-item']} ${styles[activeIndex === index ? 'active' : '']}`}>
-            <a  className={styles['page-link']}>
+        {pageNumbers.map((number, index) => (
+          <li key={number} onClick={() => paginate(number, index)} className={`${styles['page-item']} ${styles[activeIndex === index ? 'active' : '']}`}>
+            <a className={styles['page-link']}>
               {number}
-              
+
             </a>
           </li>
         ))}

@@ -1,6 +1,6 @@
 import styles from "./progess.module.css"
 
-export default function Index({ value }:{value:number}) {
+export default function Index({ value }: { value: number }) {
     return (
 
         <div className={styles.container}>
