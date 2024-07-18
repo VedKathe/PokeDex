@@ -9,6 +9,9 @@ import { PiArrowCircleLeftLight } from "react-icons/pi";
 import { PiArrowCircleRightLight } from "react-icons/pi";
 import { IoIosArrowRoundForward } from "react-icons/io";
 
+
+interface Audiocard { audio: string; color: any[]; img: string; name: string; id: number }
+
 export default function Modal({ ...props }) {
 
     const typeColors = [
@@ -41,26 +44,26 @@ export default function Modal({ ...props }) {
     const [pokemonSpecie, setPokemonSpecie] = useState<any>()
     const [pokemonType, setPokemonType] = useState([])
     const [pokemonWeakness, setpokemonWeakness] = useState<any>([])
-    const [pokemonEvolution, setpokemonEvolution] = useState([])
+    const [pokemonEvolution, setpokemonEvolution] = useState<any[]>()
 
-    
+
 
     useEffect(() => {
         async function fetchData() {
             try {
-    
-    
+
+
                 const pokemonSpecies = await fetch(pokemonData.species.url);
                 if (!pokemonSpecies.ok) {
                     throw new Error('Failed to fetch data');
                 }
                 const pokemonJsonSpecies = await pokemonSpecies.json();
-    
+
                 setPokemonSpecie(pokemonJsonSpecies)
-    
+
                 setPokemonDiscribation(
                     pokemonJsonSpecies.flavor_text_entries.reduce(
-                        (acc:any, current:any) => {
+                        (acc: any, current: any) => {
                             if (current.language.name === "en") {
                                 if (!acc.includes(current.flavor_text)) {
                                     acc.push(current.flavor_text)
@@ -71,32 +74,32 @@ export default function Modal({ ...props }) {
                         }
                         , [])
                 )
-    
+
                 getTypesColor(pokemonData)
                 fetchEvolution(pokemonJsonSpecies);
-    
-    
-    
+
+
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
         async function fetchWeakness() {
-            const typesArray = await Promise.all(pokemonData.types.map(async (element:{type:{url:string}}) => {
+            const typesArray = await Promise.all(pokemonData.types.map(async (element: { type: { url: string } }) => {
                 const pokemonType = await fetch(element.type.url);
                 if (!pokemonType.ok) {
                     throw new Error('Failed to fetch data');
                 }
-    
+
                 const pokemonTypeJson = await pokemonType.json();
-    
+
                 const damageFrom = pokemonTypeJson.damage_relations.double_damage_from
-    
+
                 return damageFrom
             }
             ))
-    
-            const names:any = [...new Set(typesArray.flatMap(array => array.map((type:{name:string}) => type.name)))];
+
+            const names: any = [...new Set(typesArray.flatMap(array => array.map((type: { name: string }) => type.name)))];
             setpokemonWeakness(names);
         }
 
@@ -105,8 +108,8 @@ export default function Modal({ ...props }) {
 
     }, [pokemonData]);
 
-    function getHeight(decimeter:number) {
-        let inches:any = (decimeter * 3.93701).toFixed(0);
+    function getHeight(decimeter: number) {
+        let inches: any = (decimeter * 3.93701).toFixed(0);
         var feet = Math.floor(inches / 12);
 
         inches %= 12;
@@ -114,14 +117,14 @@ export default function Modal({ ...props }) {
         return (feet + "'" + inches + '"')
     }
 
-    function getWeight(hectogram:number) {
+    function getWeight(hectogram: number) {
         return (hectogram * 0.1).toFixed(1)
     }
 
     function getEggGroups() {
-        let egg_groups:any = []
+        let egg_groups: any = []
 
-        pokemonSpecie.egg_groups.forEach((element:{name:string}) => {
+        pokemonSpecie.egg_groups.forEach((element: { name: string }) => {
             egg_groups.push(element.name)
         })
 
@@ -129,8 +132,8 @@ export default function Modal({ ...props }) {
     }
 
     function getAbilities() {
-        let abilities:any = []
-        pokemonData.abilities.forEach((element:{ability:{name:string}}) => {
+        let abilities: any = []
+        pokemonData.abilities.forEach((element: { ability: { name: string } }) => {
             abilities.push(element.ability.name)
         })
 
@@ -139,7 +142,7 @@ export default function Modal({ ...props }) {
 
     function getTypes() {
 
-        const types = pokemonData.types.map((element:{type:{name:string}}) =>
+        const types = pokemonData.types.map((element: { type: { name: string } }) =>
             <div className={`${styles[element.type.name]}  ${styles['type']}`} key={element.type.name}>{element.type.name}</div>
         )
 
@@ -149,7 +152,7 @@ export default function Modal({ ...props }) {
 
     function getStats() {
         const StatsName = ["HP", "Attack", "Defense", "Sp. Attack", "Sp. Def.", "Speed"]
-        const stats = pokemonData.stats.map((element:{stat:{name:string}, base_stat:number}, index:number) =>
+        const stats = pokemonData.stats.map((element: { stat: { name: string }, base_stat: number }, index: number) =>
             <li className={styles['grid-item']} key={element.stat.name}>
                 <div className={styles["item-1"]}> {StatsName[index]} </div>
                 <div className={styles["item-2"]}><Progress value={element.base_stat} /></div>
@@ -161,14 +164,14 @@ export default function Modal({ ...props }) {
 
 
     function getWeakness() {
-        const weakness = pokemonWeakness.map((element:string) =>
+        const weakness = pokemonWeakness.map((element: string) =>
             <div className={`${styles[element]}  ${styles['type']}`} key={element}>{element}</div>
         )
 
         return weakness
     }
 
-    async function fetchEvolution(pokemonJsonSpecies:{evolution_chain:{url:string}}) {
+    async function fetchEvolution(pokemonJsonSpecies: { evolution_chain: { url: string } }) {
 
         const pokemonEvoleData = await fetch(pokemonJsonSpecies.evolution_chain.url);
         if (!pokemonEvoleData.ok) {
@@ -193,9 +196,9 @@ export default function Modal({ ...props }) {
             }
             const DataJson = await data.json();
 
-            const types = DataJson.types.map((element:{type:{name:string}}) => element.type.name)
-            const color = types.reduce((acc:any, current:any) => {
-                const typeColor:{
+            const types = DataJson.types.map((element: { type: { name: string } }) => element.type.name)
+            const color = types.reduce((acc: any, current: any) => {
+                const typeColor: {
                     type: string;
                     color: string;
                 } | undefined = typeColors.find(item => item.type === current);
@@ -212,21 +215,21 @@ export default function Modal({ ...props }) {
         }
 
         setpokemonEvolution(speciesNames);
-        
+
 
     }
 
-    function getTypesColor(pokemonfulldata:{types:any}) {
-        const types = pokemonfulldata.types.map((element:{type:{name:string}}) => element.type.name)
-        const color = types.reduce((acc:any, current:any) => {
-          const typeColor = typeColors.find(item => item.type === current);
-          acc.push(typeColor?.color)
-          return acc
+    function getTypesColor(pokemonfulldata: { types: any }) {
+        const types = pokemonfulldata.types.map((element: { type: { name: string } }) => element.type.name)
+        const color = types.reduce((acc: any, current: any) => {
+            const typeColor = typeColors.find(item => item.type === current);
+            acc.push(typeColor?.color)
+            return acc
         }, [])
         setPokemonType(color)
     }
 
-    async function handleRight(id:number) {
+    async function handleRight(id: number) {
         const data = await fetch(`https://pokeapi.co/api/v2/pokemon/` + (id + 1));
         if (!data.ok) {
             throw new Error('Failed to fetch data');
@@ -236,7 +239,7 @@ export default function Modal({ ...props }) {
         setPokemonData(DataJson)
     }
 
-    async function handleLeft(id:number) {
+    async function handleLeft(id: number) {
         const data = await fetch(`https://pokeapi.co/api/v2/pokemon/` + ((id > 0) ? id - 1 : id));
         if (!data.ok) {
             throw new Error('Failed to fetch data');
@@ -337,7 +340,7 @@ export default function Modal({ ...props }) {
                                 }
                             </div>
                         </div>
-                        <div className={styles.infocol}>
+                        <div className={`${styles['infocol']} ${styles['infocol-item2']}`}>
                             Weak Against
                             <div className={`${styles['infovalue']} ${styles['ability']}`}>
                                 {
@@ -363,19 +366,35 @@ export default function Modal({ ...props }) {
                 <div className={styles.evolutionchaincontainer}>
                     <div className='p-2'>Evolution Chain</div>
                     <div className={styles.imgcontainer}>
-                        
-                        {
-                            pokemonEvolution &&
-                            pokemonEvolution.map((poke:{audio:string,color:any[],img:string,name:string,id:number},index) => {
-                                
-                                return <div key={index} className={styles.img}>
-                                    < AudioCard audioName={poke.audio} pokemonColor={poke.color} pokemonImg={poke.img} pokemonName={poke.name} pokemonID ={poke.id} />
-                                    {index < pokemonEvolution.length - 1 && <IoIosArrowRoundForward size={58} /> } 
-                                </div>
-                                
 
-                            }
-                            )
+                        {
+                            pokemonEvolution ?
+                                pokemonEvolution.map((poke: Audiocard , index) => {
+
+                                    return <div key={index} className={styles.img}>
+                                        < AudioCard audioName={poke.audio} pokemonColor={poke.color} pokemonImg={poke.img} pokemonName={poke.name} pokemonID={poke.id} />
+                                        {index < pokemonEvolution.length - 1 && <IoIosArrowRoundForward size={58} />}
+                                    </div>
+                                }
+                                ) :
+                                [...Array(3)].map((value, index) => {
+                                    return <div key={index} >
+                                        <div className=" flex justify-center items-center" >
+
+                                            <div className="rounded-xl bg-gradient-to-b from-teal-200 to-teal-300">
+                                                <div className="relative flex flex-col  text-gray-700    rounded-xl w-48 h-64   max-sm:w-40">
+                                                    <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
+                                                        <div className="w-44 h-60"></div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        
+                                    </div>
+                                })
                         }
                     </div>
                 </div>

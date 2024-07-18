@@ -6,14 +6,14 @@ import RangeSlider from '../RangeSlider'
 const types = ["normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel", "fire", "water", "grass", "electric", "psychic", "ice", "dragon", "dark", "fairy", "stellar", "unknown", "shadow"]
 
 
-export default function Index({ pokemons, isLoading, handleOnChange, handletypefilter }:{pokemons:any,isLoading:any,handleOnChange:any,handletypefilter:any}) {
+export default function Index({ pokemons, isLoading, handleOnChange, handletypefilter }: { pokemons: any, isLoading: any, handleOnChange: any, handletypefilter: any }) {
 
     const [statsFilter, setStatsFilter] = useState([])
     const [pokemonName, setpokemonName] = useState(pokemons)
 
     useEffect(() => {
         async function pokemonGetData() {
-            const result = await Promise.all(await pokemons.map(async (value:any) => {
+            const result = await Promise.all(await pokemons.map(async (value: any) => {
                 const pokemondata = await fetch(value.url);
                 if (!pokemondata.ok) {
                     throw new Error('Failed to fetch data');
@@ -21,37 +21,35 @@ export default function Index({ pokemons, isLoading, handleOnChange, handletypef
                 const pokemonfulldata = await pokemondata.json();
 
                 const result =
-                    pokemonfulldata.stats.map((value:{base_stat:number}, index:number) => {
+                    pokemonfulldata.stats.map((value: { base_stat: number }, index: number) => {
                         if (value.base_stat > statsFilter[index][0] && value.base_stat < statsFilter[index][1]) {
                             return true;
                         }
                     })
 
                 // Check if all elements in result are false
-                const finalResult = result.some((value:boolean) => value === true);
-                    if(finalResult){
-                        return pokemonfulldata.name
-                    }
-                
+                const finalResult = result.some((value: boolean) => value === true);
+                if (finalResult) {
+                    return pokemonfulldata.name
+                }
+
             })
             )
-            setpokemonName(pokemons.filter((value:{name:string},index:number)=>{
+            setpokemonName(pokemons.filter((value: { name: string }, index: number) => {
                 return value.name === result[index]
             }));
-            
+
         }
 
         pokemonGetData()
     }, [pokemons, statsFilter])
 
-    
-    function handleStatsFilter(list:any) {
+
+    function handleStatsFilter(list: any) {
         setStatsFilter(list)
     }
 
-    if (isLoading) {
-        return <h2>Loading...</h2>
-    }
+
 
     return (
         <>
@@ -86,7 +84,7 @@ export default function Index({ pokemons, isLoading, handleOnChange, handletypef
                             <span className=" block text-sm font-medium text-slate-700 mb-1">
                                 Gender
                             </span>
-                            <MultiSelectDropdown options={["Male", "Female"]} name={"Gender"} onSelectionChange={()=>{console.log("");}} />
+                            <MultiSelectDropdown options={["Male", "Female"]} name={"Gender"} onSelectionChange={() => { console.log(""); }} />
                         </label>
 
                         <label className="block">
@@ -106,22 +104,44 @@ export default function Index({ pokemons, isLoading, handleOnChange, handletypef
             </div>
 
             {/* Card Display */}
-            <div className=" pt-3 grid grid-cols-6 gap-10  max-sm:grid-cols-2 max-sm:gap-2 mt-3">
 
-                {
-                    pokemonName.map((pokemon:any, i:number) => {
-                        return (
-                            <div className=" flex justify-center items-center" key={i} >
 
-                                <Card pokemon={pokemon} pokemonlist={pokemons} statsFilter={statsFilter} />
+            {isLoading ? <div className=" pt-3 grid grid-cols-6 gap-10  max-sm:grid-cols-2 max-sm:gap-4 mt-3">
+                {[...Array(18)].map((value: any, i: number) => {
+                    return (
+                        
+                        <div className=" flex justify-center items-center"  key={i}>
+
+                            <div className="rounded-xl bg-gradient-to-b from-gray-200 to-gray-300">
+                                <div className="relative flex flex-col  text-gray-700    rounded-xl w-48 h-64   max-sm:w-40">
+                                    <div className="relative p-3 mt-3 overflow-hidden text-gray-700 h-full rounded-xl ">
+                                        <div className="w-48 h-64"></div>
+                                    </div>
+
+                                </div>
 
                             </div>
-                        );
-                    })
 
-                }
+                        </div>
+                    );
+                })}
+            </div> :
+                <div className=" pt-3 grid grid-cols-6 gap-10  max-sm:grid-cols-2 max-sm:gap-5 mt-3">
 
-            </div>
+                    {
+                        pokemonName.map((pokemon: any, i: number) => {
+                            return (
+                                <div className=" flex justify-center items-center" key={i} >
+
+                                    <Card pokemon={pokemon} pokemonlist={pokemons} statsFilter={statsFilter} />
+
+                                </div>
+                            );
+                        })
+
+                    }
+
+                </div>}
         </>
     )
 }

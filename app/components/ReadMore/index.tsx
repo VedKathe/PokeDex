@@ -1,6 +1,7 @@
 // Filename - components/ReadMore.js
 
 import React, { useState } from "react";
+import './readmore.css'
 
 const Modal = ({ children, onClose }:{children:string, onClose:any}) => {
   return (
@@ -30,7 +31,9 @@ const ReadMore = ({ children }:{children:string}) => {
   return (
     <>
       <p className="text">
-        {`${text.slice(0, 368)}...`}
+        <div className="main-text">
+          {`${text.slice(0, 368)}`}
+        </div>
         <span
           onClick={toggleModal}
           className="read-or-hide"
